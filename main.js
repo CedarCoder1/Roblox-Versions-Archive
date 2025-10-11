@@ -781,7 +781,6 @@ async function displayAppInfo(parsedPlist, iTunesMetadata, zipContents, fileSize
 }
     
     console.warn("No encryption info found in the Mach-O header.");
-    return false;
 }
 
 function setPlatform(platform, rebuild = true) {
