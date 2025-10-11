@@ -779,9 +779,6 @@ async function displayAppInfo(parsedPlist, iTunesMetadata, zipContents, fileSize
     
     document.getElementById("app-info").classList.remove("hidden");
 }
-    
-    console.warn("No encryption info found in the Mach-O header.");
-}
 
 function setPlatform(platform, rebuild = true) {
     const iosButton = document.getElementById('platform-ios');
