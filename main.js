@@ -65,15 +65,13 @@ function parseCSV(csv) {
 function generateTable(csv) {
     const rows = parseCSV(csv).slice(1); // Skip the header row
     // Expected number of columns for iOS:
-    // 0: version, 1: releaseDate, 2: (ignored column), 3: externalId, 4: minIOS, 5: notes, 6: link
-    const MIN_COLUMNS = 6; 
+    const MIN_COLUMNS = 5; 
     
     let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
       <thead>
         <tr class="text-left border-b border-gray-700">
           <th class="p-3">Version</th>
           <th class="p-3">Release Date</th>
-          <th class="p-3">SoftwareVersionExternalIdentifier</th>
           <th class=""></th>
           <th class="p-3 text-center">Download</th>
         </tr>
@@ -87,13 +85,12 @@ function generateTable(csv) {
             continue; // Skip this row if it doesn't have the expected columns
         }
 
-        const [version, versionCode, releaseDate, archived, notes, link] = row;
+        const [version, versionCode, releaseDate, notes, link] = row;
         
         html += `
         <tr class="border-b border-gray-700">
           <td class="p-3">${version}</td>
           <td class="p-3">${releaseDate}</td>
-          <td class="p-3">${externalId}</td>
           <td class="">
             <div class="flex space-x-1 items-center justify-center cursor-default">
               ${notes ? `
@@ -104,19 +101,6 @@ function generateTable(csv) {
                 </svg>
                 <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
                   ${notes}
-                </span>
-              </div>` : ''}
-              
-              ${minIOS && minIOS != "Unknown" ? `
-              <div class="group relative inline-flex items-center justify-center p-1">
-                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <text x="50%" y="50%" font-size="14" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">
-                    ${minIOS.split(' ')[1] ? minIOS.split(' ')[1].split('.')[0] + (minIOS.split(' ')[1].split('.')[1] && minIOS.split(' ')[1].split('.')[1] !== "0" ? "." + minIOS.split(' ')[1].split('.')[1] : "") : ''}
-                  </text>
-                  <text x="50%" y="85%" font-size="8" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">iOS</text>
-                </svg>
-                <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
-                  Minimum ${minIOS.split(' ')[0]} version is ${minIOS.split(' ')[1]}
                 </span>
               </div>` : ''}
             </div>
