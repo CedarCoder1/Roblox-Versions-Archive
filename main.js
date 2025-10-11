@@ -70,7 +70,7 @@ function generateTable(csv) {
         <tr class="text-left border-b border-gray-700">
           <th class="p-3">Version</th>
           <th class="p-3">Release Date</th>
-          <th class=""></th>
+          <th class="p-3">Info</th>
           <th class="p-3 text-center">Download</th>
         </tr>
       </thead>
