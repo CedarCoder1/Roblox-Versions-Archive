@@ -1,12 +1,6 @@
 const tabs = [
-    { id: 'ROBLOX', name: 'ROBLOX', csv: './csv/ROBLOX.csv' },
-    { id: 'MobileHD', name: 'ROBLOX Mobile HD', csv: './csv/MobileHD.csv' },
-    { id: 'Developer', name: 'Roblox Developer', csv: './csv/Developer.csv' },
-    { id: 'HangOutinaDiscoandChat', name: 'Hang Out in a Disco and Chat', csv: './csv/HangOutinaDiscoandChat.csv' },
-    { id: 'SpaceKnights', name: 'Space Knights', csv: './csv/SpaceKnights.csv' },
-    { id: 'SurviveTheDisasters', name: 'Survive the Disasters', csv: './csv/SurviveTheDisasters.csv' },
-    { id: 'Internal', name: 'Roblox Internal', csv: './csv/Internal.csv' },
-    { id: 'RobloxVN', name: 'Roblox VN', csv: './csv/RobloxVN.csv' }
+    { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/MSStoreLegacy.csv' },
+    { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
 ];
 
 const tabsAndroid = [
