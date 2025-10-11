@@ -2,6 +2,10 @@
 const tabs = [
     { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/MSStoreLegacy.csv' },
     { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
+    { id: 'WinPlayer', name: 'Windows Player', csv: './csv/WinPlayer.csv' },
+    { id: 'WinStudio', name: 'Windows Studio', csv: './csv/WinStudio.csv' },
+    // { id: 'MacPlayer', name: 'Mac Player', csv: './csv/MacPlayer.csv' },
+    // { id: 'MacStudio', name: 'Mac Studio', csv: './csv/MacStudio.csv' },
 ];
 
 // --- Tab Management Functions (No changes needed here) ---
@@ -69,6 +73,7 @@ function generateTable(csv) {
       <thead>
         <tr class="text-left border-b border-gray-700">
           <th class="p-3">Version</th>
+          <th class="p-3">Engine Version</th>
           <th class="p-3">Release Date</th>
           <th class="p-3">Info</th>
           <th class="p-3 text-center">Download</th>
@@ -84,10 +89,11 @@ function generateTable(csv) {
         }
 
         const [version, versionCode, releaseDate, notes, link] = row;
-        
+        // versionCode = Engine Version
         html += `
         <tr class="border-b border-gray-700">
           <td class="p-3">${version}</td>
+          <td class="p-3">${versionCode}</td>
           <td class="p-3">${releaseDate}</td>
           <td class="p-3">${notes}</td>
           ${link.trim() !== "" ? `
