@@ -4,8 +4,6 @@ const tabs = [
     { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
 ];
 
-// REMOVED: const tabsAndroid = [...]
-
 // --- Tab Management Functions (No changes needed here) ---
 function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
@@ -120,113 +118,21 @@ function generateTable(csv) {
     return html;
 }
 
-// REMOVED: function generateTableAndroid(csv) {...}
-
-// --- Window Onload (SIMPLIFIED) ---
+// --- Window Onload (REMOVED UPLOAD SUBMIT LISTENER) ---
 window.onload = async () => {
-    // Platform switching logic removed.
-    // The current state is now focused on the MSStore/iOS tabs.
-
+    
     await createTabs();
     
+    // NOTE: initializeFileUpload() is kept for general file-handling UI
+    // even though the submit listener is removed.
     initializeFileUpload();
     
-    document.getElementById('upload-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fileInput = document.getElementById('file-input');
-        const notes = document.getElementById('notes').value;
-        const uploadButton = e.target.querySelector('button[type="submit"]');
-        const progressBar = document.createElement('div');
-        const progressIndicator = document.createElement('div');
-        const statusMessage = document.getElementById('status-message');
-        
-        if (fileInput.files.length === 0) {
-            statusMessage.textContent = 'Please select a file to upload.';
-            statusMessage.className = 'text-red-500 mt-2';
-            return;
-        }
-        
-        const file = fileInput.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        // Set up progress bar
-        progressBar.className = 'w-full bg-gray-600 rounded-lg overflow-hidden mt-4';
-        progressIndicator.className = 'h-2 bg-blue-500 transition-all';
-        progressBar.appendChild(progressIndicator);
-        uploadButton.parentElement.appendChild(progressBar);
-        
-        statusMessage.className = 'text-gray-300 mt-2';
-        statusMessage.textContent = 'Uploading...';
-        
-        // Hide the button during upload
-        uploadButton.classList.add('hidden');
-        
-        try {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://upload.gofile.io/uploadfile', true);
-            
-            // Update progress bar
-            xhr.upload.onprogress = (event) => {
-                if (event.lengthComputable) {
-                    const percentComplete = (event.loaded / event.total) * 100;
-                    progressIndicator.style.width = `${percentComplete}%`;
-                    statusMessage.textContent = `Uploading... ${Math.round(percentComplete)}%`;
-                }
-            };
-            
-            xhr.onload = async () => {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.status === 'ok') {
-                        // Send notification to ai.yakov.cloud/send-notification
-                        let responseData = response.data;
-                        responseData['notes'] = notes;
-                        try {
-                            statusMessage.textContent = `Thanks for your contribution! We'll review shortly.`;
-                            statusMessage.className = 'text-green-500 mt-2';
-                        } catch (error) {
-                            statusMessage.textContent = `Upload failed (3): Notification failed to send, but file uploaded.`;
-                            statusMessage.className = 'text-red-500 mt-2';
-                        }
-                    } else {
-                        statusMessage.textContent = `Upload failed (2): ${response.message}`;
-                        statusMessage.className = 'text-red-500 mt-2';
-                    }
-                } else {
-                    statusMessage.textContent = `Upload failed (1): ${xhr.statusText}`;
-                    statusMessage.className = 'text-red-500 mt-2';
-                }
-                progressBar.remove();
-            };
-            
-            xhr.onerror = () => {
-                statusMessage.textContent = 'An error occurred during the upload.';
-                statusMessage.className = 'text-red-500 mt-2';
-                progressBar.remove();
-            };
-            
-            xhr.onloadend = () => {
-                // Show the button again after upload completes
-                uploadButton.classList.remove('hidden');
-                uploadButton.textContent = 'Upload';
-            };
-            
-            xhr.send(formData);
-        } catch (error) {
-            statusMessage.textContent = `Error: ${error.message}`;
-            statusMessage.className = 'text-red-500 mt-2';
-            progressBar.remove();
-            uploadButton.classList.remove('hidden');
-            uploadButton.textContent = 'Upload';
-        }
-    });
+    // REMOVED: document.getElementById('upload-form').addEventListener('submit', async (e) => {...})
+    // The entire block of code that handles the file upload via XMLHttpRequest is gone.
 };
 
-// --- createTabs (SIMPLIFIED) ---
+// --- createTabs (REMOVED UPLOAD BUTTON) ---
 async function createTabs() {
-    // REMOVED: const platform = localStorage.getItem('currentPlatform');
-    // REMOVED: const isAndroid = platform === 'Android';
     
     // Dynamically create the tabs container
     const tabsContainer = document.getElementById('tabs');
@@ -274,26 +180,12 @@ async function createTabs() {
         }
     }
 
-    // Add the upload button for iOS (since platform is fixed to non-Android)
-    const uploadButton = document.createElement('button');
-    uploadButton.id = 'btn-upload';
-    uploadButton.className = 'ml-auto px-4 py-2 text-gray-200 transition flex items-center space-x-2';
-    uploadButton.onclick = () => openModal('upload-modal');
-    uploadButton.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50" aria-hidden="true">
-        <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M32,35c0,0,8.312,0,9.098,0C45.463,35,49,31.463,49,27.099s-3.537-7.902-7.902-7.902c-0.02,0-0.038,0.003-0.058,0.003c0.061-0.494,0.103-0.994,0.103-1.504c0-6.71-5.439-12.15-12.15-12.15c-5.229,0-9.672,3.309-11.386,7.941c-1.087-1.089-2.591-1.764-4.251-1.764c-3.319,0-6.009,2.69-6.009,6.008c0,0.085,0.01,0.167,0.013,0.251C3.695,18.995,1,22.344,1,26.331C1,31.119,4.881,35,9.67,35c0.827,0,8.33,0,8.33,0" />
-        <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-width="2" d="M20 28L25 23 30 28M25 43L25 23.333" />
-      </svg>
-      <span>Upload an IPA</span>
-    `;
-    tabsContainer.appendChild(uploadButton);
+    // REMOVED: Upload button creation and appending
 }
 
-// --- Modals and Downloads (Simplified, removed Android-specific logic) ---
+// --- Modals and Downloads (Unchanged/No IPA-specific logic) ---
 function openModal(modalId, url, metadata = {}) {
     const modal = document.getElementById(modalId);
-
-    // REMOVED: download-bundle-modal logic, as it's Android-specific
 
     const downloadLink = modal.querySelector('.download-again-link');
     if (url && downloadLink) {
@@ -324,11 +216,8 @@ function closeModal(modalId) {
     if (dontShowAgain && dontShowAgain.checked) {
         sessionStorage.setItem(modalId + '-dontshowagain', 'true');
     }
-
-    // REMOVED: download-bundle-modal cleanup, as it's Android-specific
 }
 
-// downloadFile function remains unchanged, as it's a general utility.
 async function downloadFile(url, onProgress) {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to download ${url}`);
@@ -353,9 +242,7 @@ async function downloadFile(url, onProgress) {
     return new Blob(chunks);
 }
 
-// REMOVED: function startBundleDownload(baseUrl, metadata) {...} (Android-specific bundle logic)
-
-// --- File Upload Initialization (No changes needed here) ---
+// --- File Upload Initialization (Unchanged) ---
 function initializeFileUpload() {
     const fileInput = document.getElementById('file-input');
     const fileDropArea = document.getElementById('file-drop-area');
@@ -403,10 +290,6 @@ function initializeFileUpload() {
             additionalFields.classList.remove('opacity-0', 'scale-95');
         }, 10); // Trigger transition
         
-        // Call readIPAFile, but the displayAppInfo function and its dependency on 
-        // a parsed plist and zip contents are likely used by other parts of the UI 
-        // that were not provided.
-        // The original code was incomplete here, but the call to readIPAFile is kept
-        // to maintain the f... (end of original snippet)
+        // The original code was incomplete here, but the file-handling UI logic is maintained.
     }
 }
