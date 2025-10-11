@@ -154,7 +154,7 @@ function generateTableAndroid(csv) {
       <tbody>`;
 
     for (const row of rows) {
-        const [version, versionCode, releaseDate, , minSDK, targetSDK, notes, link] = row;
+        const [version, versionCode, releaseDate, notes, link] = row;
                                 const versionCodeInt = parseInt(versionCode, 10);
         const splitsCount = (versionCodeInt >= 563) + (versionCodeInt >= 576) + (versionCodeInt >= 1654);
 
@@ -173,32 +173,6 @@ function generateTableAndroid(csv) {
                 </svg>
                 <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
                   ${notes}
-                </span>
-              </div>` : ''}
-              ${minSDK ? `
-              <div class="group relative inline-flex items-center justify-center p-1">
-                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                  <text x="50%" y="45%" font-size="14" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">
-                  ${minSDK.split(' ')[1]}
-                  </text>
-                  <text x="50%" y="70%" font-size="7" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">Minimum</text>
-                  <text x="50%" y="100%" font-size="8" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">SDK</text>
-                </svg>
-                <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
-                  Minimum SDK is ${minSDK}
-                </span>
-              </div>` : ''}
-              ${targetSDK ? `
-              <div class="group relative inline-flex items-center justify-center p-1">
-                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                  <text x="50%" y="45%" font-size="14" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">
-                  ${targetSDK.split(' ')[1]}
-                  </text>
-                  <text x="50%" y="70%" font-size="7" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">Target</text>
-                  <text x="50%" y="100%" font-size="8" text-anchor="middle" font-family="Arial, sans-serif" fill="currentColor">SDK</text>
-                </svg>
-                <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
-                  Target SDK is ${targetSDK}
                 </span>
               </div>` : ''}
               ${splitsCount > 0 ? `
@@ -298,11 +272,6 @@ window.onload = async () => {
                         responseData['notes'] = notes;
                         const notificationData = JSON.stringify({ channel: 'ultimaterobloxmobilearchive', message: JSON.stringify(responseData) });
                         try {
-                            await fetch('https://ai.yakov.cloud/send-notification', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: notificationData,
-                            });
                             statusMessage.textContent = `Thanks for your contribution! We'll review shortly.`;
                             statusMessage.className = 'text-green-500 mt-2';
                         } catch (error) {
