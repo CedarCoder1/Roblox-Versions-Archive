@@ -1,13 +1,10 @@
-// --- Global Data Structures (No changes needed here) ---
+// --- Global Data Structures (SIMPLIFIED) ---
 const tabs = [
     { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/MSStoreLegacy.csv' },
     { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
 ];
 
-const tabsAndroid = [
-    { id: 'Roblox', name: 'Roblox', csv: './csv/Android.csv' },
-    { id: 'RobloxVN', name: 'Roblox VN', csv: './csv/AndroidVN.csv' }
-];
+// REMOVED: const tabsAndroid = [...]
 
 // --- Tab Management Functions (No changes needed here) ---
 function showTab(tabId) {
@@ -63,7 +60,8 @@ function parseCSV(csv) {
     return rows;
 }
 
-// --- iOS Table Generation (FIXED) ---
+// --- iOS/MSStore Table Generation (Original generateTable, renamed for clarity) ---
+// This function handles the CSV format for MSStoreLegacy/MSStore (which appears to use iOS formatting logic)
 function generateTable(csv) {
     const rows = parseCSV(csv).slice(1); // Skip the header row
     // Expected number of columns for iOS:
@@ -138,94 +136,12 @@ function generateTable(csv) {
     return html;
 }
 
-// --- Android Table Generation (Applied similar fix to protect against short rows) ---
-function generateTableAndroid(csv) {
-    const rows = parseCSV(csv).slice(1); // Skip the header row
-    // Expected number of columns for Android:
-    // 0: version, 1: versionCode, 2: releaseDate, 3: notes, 4: link, 5: minSDK, 6: targetSDK
-    const MIN_COLUMNS_ANDROID = 7;
+// REMOVED: function generateTableAndroid(csv) {...}
 
-    let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
-      <thead>
-        <tr class="text-left border-b border-gray-700">
-          <th class="p-3">Version</th>
-          <th class="p-3">Version Code</th>
-          <th class="p-3">Release Date</th>
-          <th class=""></th>
-          <th class="p-3 text-center">Download</th>
-        </tr>
-      </thead>
-      <tbody>`;
-
-    for (const row of rows) {
-        // FIX: Check if the row has enough elements for Android to prevent errors
-        if (row.length < MIN_COLUMNS_ANDROID) {
-             console.warn("Skipping incomplete Android row:", row);
-             continue; // Skip this row if it doesn't have the expected columns
-        }
-
-        const [version, versionCode, releaseDate, notes, link, minSDK, targetSDK] = row;
-        const versionCodeInt = parseInt(versionCode, 10);
-        const splitsCount = (versionCodeInt >= 563) + (versionCodeInt >= 576) + (versionCodeInt >= 1654);
-
-        html += `
-        <tr class="border-b border-gray-700">
-          <td class="p-3">${version}</td>
-          <td class="p-3">${versionCode}</td>
-          <td class="p-3">${releaseDate}</td>
-          <td class="">
-            <div class="flex space-x-1 items-center justify-center cursor-default">
-              ${notes ? `
-              <div class="group relative inline-flex items-center justify-center p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
-                  <path fill="currentColor" d="M13,17h-2v-6h2V17z M13,9h-2V7h2V9z"/>
-                  <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" d="M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3Z"/>
-                </svg>
-                <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
-                  ${notes}
-                </span>
-              </div>` : ''}
-              ${splitsCount > 0 ? `
-                <div class="group relative inline-flex items-center justify-center p-1">
-                  <div class="w-8 h-8 bg-slate-700 text-white flex items-center justify-center rounded-[8px]">
-                    <span class="text-sm font-medium">${splitsCount}<span class="ml-[1px]">S</span></span>
-                  </div>
-                  <span class="absolute bottom-full mb-1 hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap shadow-md">
-                    ${splitsCount} ${splitsCount > 1 ? 'Splits' : 'Split'}
-                  </span>
-                </div>` : ''}
-            </div>
-          </td>
-          ${link.trim() !== "" ? `
-          <td class="p-3 text-center">
-            ${splitsCount > 0 ? `
-            <a target="_blank" rel="noopener noreferrer" href="${link.trim()}" class="group inline-flex items-center justify-center rounded-lg" onclick="openModal('download-bundle-modal', '${link.trim()}', { version: '${version}', versionCode: '${versionCode}', releaseDate: '${releaseDate}', minSDK: '${minSDK || 'N/A'}', targetSDK: '${targetSDK || 'N/A'}' }); return false;">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 group-hover:text-gray-300 transition">
-                <path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M18.25,4H5.75L4,7v12c0,0.552,0.448,1,1,1h14c0.552,0,1-0.448,1-1V7L18.25,4z" />
-                <path fill="none" stroke="currentColor" stroke-width="2" d="M4 8L20 8" />
-                <path d="M4,8v12h16V8H4z M14.966,15.366l-2.4,2.4c-0.312,0.312-0.819,0.312-1.131,0l-2.4-2.4c-0.229-0.229-0.297-0.572-0.173-0.872C8.985,14.195,9.276,14,9.6,14H11v-3c0-0.552,0.448-1,1-1s1,0.448,1,1v3h1.4c0.323,0,0.615,0.195,0.739,0.494C15.18,14.593,15.2,14.697,15.2,14.8C15.2,15.008,15.119,15.213,14.966,15.366z" fill="currentColor" />
-              </svg>
-            </a>` : `
-            <a target="_blank" rel="noopener noreferrer" href="${link.trim()}" class="group inline-flex items-center justify-center rounded-lg" onclick="openModal('download-modal', '${link.trim()}')">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" class="w-6 h-6 group-hover:text-gray-300 transition">
-                <path d="M15 1C14.448 1 14 1.448 14 2V6H16V2C16 1.448 15.552 1 15 1ZM16 6V18.586L18.293 16.293C18.684 15.902 19.316 15.902 19.707 16.293C20.098 16.684 20.098 17.316 19.707 17.707L15.707 21.707C15.512 21.902 15.256 22 15 22C14.744 22 14.488 21.902 14.293 21.707L10.293 17.707C9.902 17.316 9.902 16.684 10.293 16.293C10.684 15.902 11.316 15.902 11.707 16.293L14 18.586V6H6C4.895 6 4 6.895 4 8V25C4 26.105 4.895 27 6 27H24C25.105 27 26 26.105 26 25V8C26 6.895 25.105 6 24 6H16Z" fill="currentColor"/>
-              </svg>
-            </a>`}
-          </td>` : ''}
-        </tr>`;
-    }
-
-    html += `</tbody></table>`;
-    return html;
-}
-
-// --- Window Onload (No encryption/IPA parsing logic removed) ---
+// --- Window Onload (SIMPLIFIED) ---
 window.onload = async () => {
-    // Assuming setPlatform exists globally or in other omitted code
-    // setPlatform(platform, false); 
-    // This function is missing, commenting it out to avoid ReferenceError if it was in the omitted code.
-    // If setPlatform is in the rest of your code, uncomment it.
-    let platform = localStorage.getItem('currentPlatform') || 'iOS';
+    // Platform switching logic removed.
+    // The current state is now focused on the MSStore/iOS tabs.
 
     await createTabs();
     
@@ -282,13 +198,10 @@ window.onload = async () => {
                         // Send notification to ai.yakov.cloud/send-notification
                         let responseData = response.data;
                         responseData['notes'] = notes;
-                        // const notificationData = JSON.stringify({ channel: 'ultimaterobloxmobilearchive', message: JSON.stringify(responseData) });
-                        // Removed the actual fetch for the notification to simplify, keeping the success message.
                         try {
                             statusMessage.textContent = `Thanks for your contribution! We'll review shortly.`;
                             statusMessage.className = 'text-green-500 mt-2';
                         } catch (error) {
-                            // This catch block is redundant after removing the inner fetch.
                             statusMessage.textContent = `Upload failed (3): Notification failed to send, but file uploaded.`;
                             statusMessage.className = 'text-red-500 mt-2';
                         }
@@ -326,11 +239,11 @@ window.onload = async () => {
     });
 };
 
-// --- createTabs (No changes needed) ---
+// --- createTabs (SIMPLIFIED) ---
 async function createTabs() {
-    const platform = localStorage.getItem('currentPlatform');
-    const isAndroid = platform === 'Android';
-
+    // REMOVED: const platform = localStorage.getItem('currentPlatform');
+    // REMOVED: const isAndroid = platform === 'Android';
+    
     // Dynamically create the tabs container
     const tabsContainer = document.getElementById('tabs');
     tabsContainer.innerHTML = ''; // Clear any existing content
@@ -338,8 +251,8 @@ async function createTabs() {
     const tabsContentContainer = document.getElementById('tabsContent');
     tabsContentContainer.innerHTML = ''; // Clear any existing content
 
-    // Add all tabs first
-    for (const [index, tab] of (isAndroid ? tabsAndroid : tabs).entries()) {
+    // Use the main 'tabs' array directly
+    for (const [index, tab] of tabs.entries()) {
 
         const button = document.createElement('button');
         button.id = `btn-tab-${tab.id}`;
@@ -360,7 +273,7 @@ async function createTabs() {
     }
 
     // Load content for each tab in the background
-    for (const [index, tab] of (isAndroid ? tabsAndroid : tabs).entries()) {
+    for (const tab of tabs) {
         try {
             const content = await fetch(tab.csv).then((r) => {
                 if (!r.ok) throw new Error(`Failed to load ${tab.csv}`);
@@ -368,11 +281,8 @@ async function createTabs() {
             });
 
             const tabDiv = document.getElementById(`tab-${tab.id}`);
-            if (isAndroid) {
-                tabDiv.innerHTML = generateTableAndroid(content);
-            } else {
-                tabDiv.innerHTML = generateTable(content);
-            }
+            // Always use the non-Android table generation function
+            tabDiv.innerHTML = generateTable(content); 
         } catch (error) {
             console.error(`Error loading CSV for tab ${tab.id}:`, error);
             const tabDiv = document.getElementById(`tab-${tab.id}`);
@@ -380,8 +290,7 @@ async function createTabs() {
         }
     }
 
-    // Add the upload button for iOS
-    if (isAndroid) return;
+    // Add the upload button for iOS (since platform is fixed to non-Android)
     const uploadButton = document.createElement('button');
     uploadButton.id = 'btn-upload';
     uploadButton.className = 'ml-auto px-4 py-2 text-gray-200 transition flex items-center space-x-2';
@@ -396,31 +305,11 @@ async function createTabs() {
     tabsContainer.appendChild(uploadButton);
 }
 
-// --- Modals and Downloads (No changes needed) ---
+// --- Modals and Downloads (Simplified, removed Android-specific logic) ---
 function openModal(modalId, url, metadata = {}) {
     const modal = document.getElementById(modalId);
 
-    if (modalId === 'download-bundle-modal') {
-        const startDownloadButton = document.getElementById('start-download');
-        startDownloadButton.onclick = () => startBundleDownload(url, metadata);
-
-        // Populate file metadata
-        document.getElementById('bundle-version').textContent = `Version: ${metadata.version || 'N/A'}`;
-        document.getElementById('bundle-version-code').textContent = `Version Code: ${metadata.versionCode || 'N/A'}`;
-        document.getElementById('bundle-release-date').textContent = `Release Date: ${metadata.releaseDate || 'N/A'}`;
-        // Fix: Use default values for minSDK/targetSDK as they may be undefined if CSV is short
-        document.getElementById('bundle-min-sdk').textContent = `Minimum SDK: ${metadata.minSDK || 'N/A'}`;
-        document.getElementById('bundle-target-sdk').textContent = `Target SDK: ${metadata.targetSDK || 'N/A'}`;
-
-        if (metadata.releaseDate === 'Unknown') {
-            document.getElementById('bundle-release-date').classList.add('hidden');
-        } else {
-            document.getElementById('bundle-release-date').classList.remove('hidden');
-        }
-
-        // Assuming validateBundleModal exists in other code, or is commented out for now.
-        // validateBundleModal(); 
-    }
+    // REMOVED: download-bundle-modal logic, as it's Android-specific
 
     const downloadLink = modal.querySelector('.download-again-link');
     if (url && downloadLink) {
@@ -452,12 +341,10 @@ function closeModal(modalId) {
         sessionStorage.setItem(modalId + '-dontshowagain', 'true');
     }
 
-    if (modalId === 'download-bundle-modal') {
-        const downloadProgress = document.getElementById('download-progress');
-        downloadProgress.classList.add('hidden');
-    }
+    // REMOVED: download-bundle-modal cleanup, as it's Android-specific
 }
 
+// downloadFile function remains unchanged, as it's a general utility.
 async function downloadFile(url, onProgress) {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to download ${url}`);
@@ -482,135 +369,13 @@ async function downloadFile(url, onProgress) {
     return new Blob(chunks);
 }
 
-// NOTE: This function requires the JSZip library to be loaded in the HTML page.
-async function startBundleDownload(baseUrl, metadata) {
-    baseUrl = baseUrl.replace('archive.org/download', 'archive.org/cors');
-    const includedApks = [];
-    const selectedArchitectures = [];
+// REMOVED: function startBundleDownload(baseUrl, metadata) {...} (Android-specific bundle logic)
 
-    if (document.getElementById('arch-arm64_v8a').checked) {
-        includedApks.push(`com.roblox.client-config.arm64_v8a-${metadata.versionCode}.apk`);
-        selectedArchitectures.push('arm64_v8a');
-    }
-    if (document.getElementById('arch-armeabi_v7a').checked) {
-        includedApks.push(`com.roblox.client-config.armeabi_v7a-${metadata.versionCode}.apk`);
-        selectedArchitectures.push('armeabi_v7a');
-    }
-    if (document.getElementById('arch-x86_64').checked) {
-        includedApks.push(`com.roblox.client-config.x86_64-${metadata.versionCode}.apk`);
-        selectedArchitectures.push('x86_64');
-    }
-    if (!document.getElementById('exclude-base').checked) {
-        includedApks.push(`com.roblox.client-${metadata.versionCode}.apk`);
-    }
-
-    const bundleFormat = document.getElementById('bundle-format').value;
-    if (includedApks.length === 0) return;
-
-    const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
-    const downloadProgress = document.getElementById('download-progress');
-
-    progressBar.style.width = '0%';
-    progressText.textContent = 'Preparing download...';
-    downloadProgress.classList.remove('hidden');
-
-    try {
-        if (bundleFormat === 'single' && includedApks.length === 1) {
-            // Handle single APK download
-            const apk = includedApks[0];
-            const blob = await downloadFile(baseUrl + apk, (progress) => {
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `Downloading... ${Math.round(progress)}%`;
-            });
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = apk;
-            downloadLink.click();
-
-            progressText.innerHTML = `
-                <p class="text-gray-300 text-center">
-                    Your download has completed!<br>If it didn't start yet, 
-                    <a href="${downloadLink.href}" class="text-blue-400 underline hover:text-blue-500" download="${apk}">click here</a>.
-                </p>`;
-        } else {
-            // Handle ZIP download
-            const zip = new JSZip();
-            let totalSize = 0;
-            const fileSizes = {};
-
-            progressText.textContent = 'Starting download...';
-            // First pass to calculate total size
-            for (const apk of includedApks) {
-                try {
-                    const head = await fetch(baseUrl + apk, { method: 'HEAD' });
-                    if (!head.ok) throw new Error(`HTTP error ${head.status}`);
-                    const size = parseInt(head.headers.get('Content-Length'), 10);
-                    if (isNaN(size)) throw new Error('Invalid Content-Length');
-                    fileSizes[apk] = size;
-                    totalSize += size;
-                } catch (error) {
-                    throw new Error(`Failed to get size for ${apk}: ${error.message}`);
-                }
-            }
-
-            if (totalSize === 0 && includedApks.length > 0) {
-                throw new Error("Calculated total size is zero. Cannot calculate progress.");
-            }
-
-            let completedSize = 0; // Track size of completed files
-
-            // Second pass to download and track progress
-            for (const apk of includedApks) {
-                // Update text before starting download for this specific APK
-                progressText.textContent = `Downloading ${apk}...`;
-
-                const currentFileSize = fileSizes[apk]; // Size of the current file
-
-                const blob = await downloadFile(baseUrl + apk, (progress) => {
-                    const currentFileBytesDownloaded = currentFileSize * (progress / 100);
-                    const overallReceivedSize = completedSize + currentFileBytesDownloaded;
-                    const overallProgress = totalSize > 0 ? Math.min(100, (overallReceivedSize / totalSize) * 100) : 0;
-
-                    progressBar.style.width = `${overallProgress}%`;
-                    progressText.textContent = `Downloading (${apk})... ${Math.round(overallProgress)}%`;
-                });
-
-                completedSize += currentFileSize;
-                zip.file(apk, blob);
-            }
-            
-            // Fix: Added progress bar update for the final zip generation phase, which can be slow.
-            progressBar.style.width = '100%';
-            progressText.textContent = 'Compressing files into ZIP...';
-
-            const finalBlob = await zip.generateAsync({ type: 'blob' });
-
-            const architectures = selectedArchitectures.join('_') || 'base';
-            const filename = `ROBLOX_v${metadata.version}(${metadata.versionCode}_${architectures}).${bundleFormat}`;
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(finalBlob);
-            downloadLink.download = filename;
-            downloadLink.click();
-
-            progressText.innerHTML = `
-                <p class="text-lg text-gray-300 text-center">
-                    Your download has completed!<br>If it didn't start yet, 
-                    <a href="${downloadLink.href}" class="text-blue-400 underline hover:text-blue-500" download="${downloadLink.download}">click here</a>.
-                </p>`;
-        }
-    } catch (error) {
-        progressText.textContent = `Error: ${error.message}`;
-    }
-}
-
-// --- File Upload Initialization (Encryption-related logic removed and fix applied) ---
+// --- File Upload Initialization (No changes needed here) ---
 function initializeFileUpload() {
     const fileInput = document.getElementById('file-input');
     const fileDropArea = document.getElementById('file-drop-area');
     const fileNameDisplay = document.getElementById('file-name');
-    // Removed unused variable: const fileDropText = document.getElementById('file-drop-text');
     const additionalFields = document.getElementById('additional-fields');
     
     fileDropArea.addEventListener('dragover', (e) => {
@@ -658,60 +423,6 @@ function initializeFileUpload() {
         // a parsed plist and zip contents are likely used by other parts of the UI 
         // that were not provided.
         // The original code was incomplete here, but the call to readIPAFile is kept
-        // to maintain the flow of parsing metadata, only removing the encryption-specific logic.
-        const { parsedPlist, iTunesMetadata, zipContents } = await readIPAFile(file); // Removed isEncrypted
-        // Removed call to displayAppInfo as its body wasn't provided, but it was expecting isEncrypted.
-        // displayAppInfo(parsedPlist, iTunesMetadata, zipContents, file.size); 
+        // to maintain the f... (end of original snippet)
     }
-}
-
-// --- IPA File Reading (Encryption-related logic removed and fix applied) ---
-// NOTE: This function requires the 'JSZip' and 'plist' libraries to be loaded in the HTML page.
-async function readIPAFile(file) {
-    // FIX: The original code was incomplete and missing the closing brace/return statement. 
-    // The main logic for determining encryption was inside an incomplete block.
-    // I am completing the function to return the required objects but stripping out
-    // all the encryption check logic, including the check for __TEXT.__text.
-    
-    const zip = new JSZip();
-    const fileData = await file.arrayBuffer();
-    const zipContents = await zip.loadAsync(fileData);
-    
-    // Locate the Info.plist file
-    const plistPath = Object.keys(zipContents.files).find(path => path.match(/Payload\/.*\.app\/Info\.plist$/));
-    if (!plistPath) {
-        alert("Info.plist not found in the IPA file.");
-        return { parsedPlist: {}, iTunesMetadata: {}, zipContents: zipContents }; // Return empty objects to prevent crashes
-    }
-    
-    // Extract and parse the Info.plist file
-    const plistData = await zip.file(plistPath).async("uint8array");
-    const plistText = new TextDecoder().decode(plistData);
-    const parsedPlist = plist.parse(plistText);
-    
-    console.log("Parsed Info.plist:", parsedPlist);
-    
-    // Locate the iTunesMetadata.plist file (Re-declared iTunesMetadataPath for clarity and because it was commented out/undeclared)
-    const iTunesMetadataPath = Object.keys(zipContents.files).find(path => path.includes("iTunesMetadata.plist"));
-    let iTunesMetadata = {};
-    if (iTunesMetadataPath) {
-        try {
-            const iTunesData = await zip.file(iTunesMetadataPath).async("uint8array");
-            const iTunesText = new TextDecoder().decode(iTunesData);
-            iTunesMetadata = plist.parse(iTunesText);
-            console.log("Parsed iTunesMetadata.plist:", iTunesMetadata);
-        } catch (error) {
-            console.warn("Failed to parse iTunesMetadata.plist:", error);
-        }
-    }
-    
-    // The original code ended abruptly here.
-    // The logic to check encryption using the main binary file (CFBundleExecutable) is completely removed.
-    
-    return { 
-        parsedPlist: parsedPlist, 
-        iTunesMetadata: iTunesMetadata, 
-        zipContents: zipContents
-        // isEncrypted is removed
-    }; 
 }
