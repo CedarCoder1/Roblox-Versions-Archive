@@ -6,6 +6,7 @@ const tabs = [
     { id: 'WinStudio', name: 'Windows Studio', csv: './csv/WinStudio.csv' },
     // { id: 'MacPlayer', name: 'Mac Player', csv: './csv/MacPlayer.csv' },
     // { id: 'MacStudio', name: 'Mac Studio', csv: './csv/MacStudio.csv' },
+    { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
 ];
 
 // --- Tab Management Functions (No changes needed here) ---
