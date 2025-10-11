@@ -66,7 +66,7 @@ function generateTable(csv) {
     const rows = parseCSV(csv).slice(1); // Skip the header row
     // Expected number of columns for iOS:
     // 0: version, 1: releaseDate, 2: (ignored column), 3: externalId, 4: minIOS, 5: notes, 6: link
-    const MIN_COLUMNS = 7; 
+    const MIN_COLUMNS = 6; 
     
     let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
       <thead>
