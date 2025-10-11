@@ -77,7 +77,7 @@ function generateTable(csv) {
     
     for (const row of rows) {
         const [version, releaseDate, , externalId, minIOS, notes, link] = row;
-        const encrypted = link.includes('ipadown');
+        // const encrypted = link.includes('ipadown');
         
         html += `
         <tr class="border-b border-gray-700">
@@ -655,7 +655,7 @@ async function readIPAFile(file) {
     console.log("Parsed Info.plist:", parsedPlist);
     
     // Locate the iTunesMetadata.plist file
-    const iTunesMetadataPath = Object.keys(zipContents.files).find(path => path.includes("iTunesMetadata.plist"));
+    // const iTunesMetadataPath = Object.keys(zipContents.files).find(path => path.includes("iTunesMetadata.plist"));
     let iTunesMetadata = {};
     if (iTunesMetadataPath) {
         try {
@@ -733,7 +733,7 @@ async function displayAppInfo(parsedPlist, iTunesMetadata, zipContents, fileSize
         });
         
         for (const iconFile of sortedIcons) {
-            const potentialPath = Object.keys(zipContents.files).find(path => path.includes(iconFile));
+            // const potentialPath = Object.keys(zipContents.files).find(path => path.includes(iconFile));
             if (potentialPath) {
                 iconPath = potentialPath;
                 break;
@@ -779,45 +779,6 @@ async function displayAppInfo(parsedPlist, iTunesMetadata, zipContents, fileSize
     
     document.getElementById("app-info").classList.remove("hidden");
 }
-
-function analyzeExecutable(executableData) {
-    const ENCRYPTION_INFO_CMDS = [0x21, 0x2C]; // 0x21 = LC_ENCRYPTION_INFO, 0x2C = LC_ENCRYPTION_INFO_64
-    
-    const dataView = new DataView(executableData);
-    const magicBE = dataView.getUint32(0, false);
-    const magicLE = dataView.getUint32(0, true);
-    
-    let magic, littleEndian;
-    if ([0xfeedface, 0xfeedfacf].includes(magicLE)) {
-        magic = magicLE;
-        littleEndian = true;
-    } else if ([0xcefaedfe, 0xcffaedfe].includes(magicBE)) {
-        magic = magicBE;
-        littleEndian = false;
-    } else {
-        console.warn("Not a valid Mach-O binary.");
-        return false;
-    }
-    
-    const is64Bit = magic === 0xfeedfacf || magic === 0xcffaedfe;
-    const headerSize = is64Bit ? 32 : 28;
-    const ncmds = dataView.getUint32(16, littleEndian);
-    const commandsOffset = headerSize;
-    
-    let offset = commandsOffset;
-    for (let i = 0; i < ncmds; i++) {
-        const cmd = dataView.getUint32(offset, littleEndian);
-        const cmdsize = dataView.getUint32(offset + 4, littleEndian);
-        
-        if (ENCRYPTION_INFO_CMDS.includes(cmd)) {
-            const cryptidOffset = is64Bit ? offset + 16 : offset + 12;
-            const cryptid = dataView.getUint32(cryptidOffset, littleEndian);
-            console.log(`Encryption detected: cryptid=${cryptid}`);
-            return cryptid === 1;
-        }
-        
-        offset += cmdsize;
-    }
     
     console.warn("No encryption info found in the Mach-O header.");
     return false;
