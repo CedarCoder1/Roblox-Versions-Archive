@@ -89,20 +89,7 @@ function generateTable(csv) {
         <tr class="border-b border-gray-700">
           <td class="p-3">${version}</td>
           <td class="p-3">${releaseDate}</td>
-          <td class="">
-            <div class="flex space-x-1 items-center justify-center cursor-default">
-              ${notes ? `
-              <div class="group relative inline-flex items-center justify-center p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
-                  <path fill="currentColor" d="M13,17h-2v-6h2V17z M13,9h-2V7h2V9z"/>
-                  <path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2" d="M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3Z"/>
-                </svg>
-                <span class="absolute bottom-full hidden group-hover:flex bg-gray-900 text-white text-xs rounded-md py-1 px-2 whitespace-nowrap">
-                  ${notes}
-                </span>
-              </div>` : ''}
-            </div>
-          </td>
+          <td class="p-3">${notes}</td>
           ${link.trim() !== "" ? `
           <td class="p-3 text-center">
             <a target="_blank" rel="noopener noreferrer" href="${link.trim()}" class="group inline-flex items-center justify-center rounded-lg" onclick="openModal('download-modal', '${link.trim()}')">
