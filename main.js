@@ -87,7 +87,7 @@ function generateTable(csv) {
             continue; // Skip this row if it doesn't have the expected columns
         }
 
-        const [version, releaseDate, , externalId, minIOS, notes, link] = row;
+        const [version, versionCode, releaseDate, archived, notes, link] = row;
         
         html += `
         <tr class="border-b border-gray-700">
