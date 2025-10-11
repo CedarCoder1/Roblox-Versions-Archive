@@ -63,9 +63,12 @@ function parseCSV(csv) {
     return rows;
 }
 
-// --- iOS Table Generation (Encryption-related code removed and fix applied) ---
+// --- iOS Table Generation (FIXED) ---
 function generateTable(csv) {
     const rows = parseCSV(csv).slice(1); // Skip the header row
+    // Expected number of columns for iOS:
+    // 0: version, 1: releaseDate, 2: (ignored column), 3: externalId, 4: minIOS, 5: notes, 6: link
+    const MIN_COLUMNS = 7; 
     
     let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
       <thead>
@@ -80,9 +83,13 @@ function generateTable(csv) {
       <tbody>`;
     
     for (const row of rows) {
-        // Removed unused column placeholder from destructuring: [, externalId, minIOS, notes, link]
+        // FIX: Check if the row has enough elements to avoid destructuring 'link' as undefined
+        if (row.length < MIN_COLUMNS) {
+            console.warn("Skipping incomplete row:", row);
+            continue; // Skip this row if it doesn't have the expected columns
+        }
+
         const [version, releaseDate, , externalId, minIOS, notes, link] = row;
-        // Removed: const encrypted = link.includes('ipadown');
         
         html += `
         <tr class="border-b border-gray-700">
@@ -101,7 +108,7 @@ function generateTable(csv) {
                   ${notes}
                 </span>
               </div>` : ''}
-    
+              
               ${minIOS && minIOS != "Unknown" ? `
               <div class="group relative inline-flex items-center justify-center p-1">
                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -131,9 +138,12 @@ function generateTable(csv) {
     return html;
 }
 
-// --- Android Table Generation (Undeclared variable fix applied) ---
+// --- Android Table Generation (Applied similar fix to protect against short rows) ---
 function generateTableAndroid(csv) {
     const rows = parseCSV(csv).slice(1); // Skip the header row
+    // Expected number of columns for Android:
+    // 0: version, 1: versionCode, 2: releaseDate, 3: notes, 4: link, 5: minSDK, 6: targetSDK
+    const MIN_COLUMNS_ANDROID = 7;
 
     let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
       <thead>
@@ -148,8 +158,12 @@ function generateTableAndroid(csv) {
       <tbody>`;
 
     for (const row of rows) {
-        // Added placeholders for minSDK and targetSDK which were used in openModal but missing from the Android CSV row destructuring.
-        // Assuming Android CSV format is [version, versionCode, releaseDate, notes, link, minSDK, targetSDK]
+        // FIX: Check if the row has enough elements for Android to prevent errors
+        if (row.length < MIN_COLUMNS_ANDROID) {
+             console.warn("Skipping incomplete Android row:", row);
+             continue; // Skip this row if it doesn't have the expected columns
+        }
+
         const [version, versionCode, releaseDate, notes, link, minSDK, targetSDK] = row;
         const versionCodeInt = parseInt(versionCode, 10);
         const splitsCount = (versionCodeInt >= 563) + (versionCodeInt >= 576) + (versionCodeInt >= 1654);
@@ -204,7 +218,6 @@ function generateTableAndroid(csv) {
     html += `</tbody></table>`;
     return html;
 }
-
 
 // --- Window Onload (No encryption/IPA parsing logic removed) ---
 window.onload = async () => {
