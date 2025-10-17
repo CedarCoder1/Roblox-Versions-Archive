@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Desktop Archive</title>
+    <meta name="title" content="Roblox Desktop Archive">
+    <meta name="description" content="Browse and download historical versions of Roblox for Windows and Mac.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cedarcoder1.github.io/Roblox-Versions-Archive/">
+    <meta property="og:title" content="Roblox Desktop Archive">
+    <meta property="og:description" content="Browse and download historical versions of Roblox for Windows and Mac.">
+    <meta property="og:image" content="https://cedarcoder1.github.io/Roblox-Versions-Archive/logo.png">
+
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <meta name="theme-color" content="#B92120">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Roblox Desktop Archive">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google-site-verification" content="gUwhDSivkHB4clW0LpNbUoCeiO64EJhBds2l2cxHA5Q" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plist@3.0.1/dist/plist.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script src="./cgbi-to-png.js"></script>
+    <script src="./archive_list.js"></script>
+    </head>
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+  <main class="container mx-auto p-6 flex-grow">
+    <div class="relative">
+      <div class="flex items-center justify-center space-x-3">
+        <h1 class="text-3xl font-bold text-center">Roblox Desktop Archive</h1>
+        <img src="./logo.png" alt="Logo" class="h-12 w-12 rounded-lg">
+      </div>
+    </div>
+    <h3 class="text-2xl text-center">Online Archive Viewer</h3>
+    <h5 class="text-1xl mb-6 text-center"><a target="_blank" rel="noopener noreferrer" href="https://cedarcoder1.github.io/Roblox-Versions-Archive" class="text-gray-100 hover:text-white transition-colors">main list</a> • <a target="_blank" rel="noopener noreferrer" href="https://setup.rbxcdn.com/DeployHistory.txt" class="text-gray-100 hover:text-white transition-colors">deploy history</a> • <a target="_blank" rel="noopener noreferrer" href="https://discord.gg/8ak7wKYJpN" class="text-gray-100 hover:text-white transition-colors">discord</a> • <a target="_blank" rel="noopener noreferrer" href="https://github.com/CedarCoder1/Roblox-Versions-Archive" class="text-gray-100 hover:text-white transition-colors">github</a> • <a target="_blank" rel="noopener noreferrer" href="https://yakov5776.github.io/ultimaterobloxmobilearchive/" class="text-gray-100 hover:text-white transition-colors">mobile archive</a></h5>
+
+        <!-- Tabs -->
+        <div id="tabs" class="flex border-b border-gray-700"></div>
+        <div id="tabsContent"></div>
+
+  </main>
+  <footer class="bg-gray-800 text-center text-gray-300 py-4 mt-12">
+    <p class="text-sm">site made by <a href="https://github.com/Yakov5776" class="text-blue-100 hover:text-white transition-colors">Yakov5776</a> (<a href="https://ko-fi.com/yakov5776" class="text-blue-100 hover:text-white transition-colors">donate</a>) and <a href="https://github.com/CedarCoder1" class="text-blue-100 hover:text-white transition-colors">CedarCoder1</a>.</p>
+    <p class="text-sm">Spreadsheets maintained by <a href="https://github.com/CedarCoder1" class="text-blue-100 hover:text-white transition-colors">CedarCoder1</a>.</p>
+  </footer>
+</body>
+</html>
