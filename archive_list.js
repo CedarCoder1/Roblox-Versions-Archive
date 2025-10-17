@@ -73,7 +73,7 @@ function generateTable(csv) {
     let html = `<table class="min-w-full bg-gray-800 border border-gray-700 rounded-b-lg">
       <thead>
         <tr class="text-left border-b border-gray-700">
-          <th class="p-3">Version Range</th>
+          <th class="p-3">Starting Version</th>
           <th class="p-3">Engine Version Range</th>
           <th class="p-3">Release Date Range</th>
           <th class="p-3 text-center">Download</th>
