@@ -9,7 +9,7 @@ const tabs = [
     { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
 ];
 
-// --- Tab Management Functions (No changes needed here) ---
+// --- Tab Management Functions ---
 function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
     document.getElementById(tabId).classList.remove('hidden');
@@ -24,7 +24,7 @@ function showTab(tabId) {
     activeBtn.classList.add('bg-gray-800', 'border-b-2', 'border-blue-500', 'text-white');
 }
 
-// --- CSV Parsing Function (No changes needed here) ---
+// --- CSV Parsing Function ---
 function parseCSV(csv) {
     const rows = [];
     let currentRow = [];
@@ -177,7 +177,7 @@ async function createTabs() {
     // REMOVED: Upload button creation and appending
 }
 
-// --- Modals and Downloads (Unchanged/No IPA-specific logic) ---
+// --- Modals and Downloads ---
 function openModal(modalId, url, metadata = {}) {
     const modal = document.getElementById(modalId);
 
@@ -236,7 +236,7 @@ async function downloadFile(url, onProgress) {
     return new Blob(chunks);
 }
 
-// --- File Upload Initialization (Unchanged) ---
+// --- File Upload Initialization ---
 function initializeFileUpload() {
     const fileInput = document.getElementById('file-input');
     const fileDropArea = document.getElementById('file-drop-area');
