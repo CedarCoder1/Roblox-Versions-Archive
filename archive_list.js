@@ -88,14 +88,13 @@ function generateTable(csv) {
             continue; // Skip this row if it doesn't have the expected columns
         }
 
-        const [version, versionCode, releaseDate, notes, link] = row;
+        const [version, versionCode, releaseDate, link] = row;
         // versionCode = Engine Version
         html += `
         <tr class="border-b border-gray-700">
           <td class="p-3">${version}</td>
           <td class="p-3">${versionCode}</td>
           <td class="p-3">${releaseDate}</td>
-          <td class="p-3">${notes}</td>
           ${link.trim() !== "" ? `
           <td class="p-3 text-center">
             <a target="_blank" rel="noopener noreferrer" href="${link.trim()}" class="group inline-flex items-center justify-center rounded-lg" onclick="openModal('download-modal', '${link.trim()}')">
