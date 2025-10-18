@@ -1,9 +1,9 @@
 // --- Global Data Structures (SIMPLIFIED) ---
 const tabs = [
-    { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/archive_list/MSStoreLegacy.csv' },
-    { id: 'MSStore', name: 'MS Store', csv: './csv/archive_list/MSStore.csv' },
     { id: 'WinPlayer', name: 'Windows Player', csv: './csv/archive_list/WinPlayer.csv' },
     { id: 'WinStudio', name: 'Windows Studio', csv: './csv/archive_list/WinStudio.csv' },
+    { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/archive_list/MSStoreLegacy.csv' },
+    { id: 'MSStore', name: 'MS Store', csv: './csv/archive_list/MSStore.csv' },
     // { id: 'MacPlayer', name: 'Mac Player', csv: './csv/archive_list/MacPlayer.csv' },
     // { id: 'MacStudio', name: 'Mac Studio', csv: './csv/archive_list/MacStudio.csv' },
     { id: 'RCCService', name: 'RCC Service', csv: './csv/archive_list/RCCService.csv' },
