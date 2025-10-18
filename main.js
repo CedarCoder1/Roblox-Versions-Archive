@@ -6,7 +6,7 @@ const tabs = [
     { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
     // { id: 'MacPlayer', name: 'Mac Player', csv: './csv/MacPlayer.csv' },
     // { id: 'MacStudio', name: 'Mac Studio', csv: './csv/MacStudio.csv' },
-    { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
+    // { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
 ];
 
 // --- Tab Management Functions ---
