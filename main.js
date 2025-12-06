@@ -2,11 +2,11 @@
 const tabs = [
     { id: 'WinPlayer', name: 'Windows Player', csv: './csv/WinPlayer.csv' },
     { id: 'WinStudio', name: 'Windows Studio', csv: './csv/WinStudio.csv' },
+    { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
     { id: 'MSStoreLegacy', name: 'MS Store (Legacy)', csv: './csv/MSStoreLegacy.csv' },
     // { id: 'MSStore', name: 'MS Store', csv: './csv/MSStore.csv' },
     // { id: 'MacPlayer', name: 'Mac Player', csv: './csv/MacPlayer.csv' },
     // { id: 'MacStudio', name: 'Mac Studio', csv: './csv/MacStudio.csv' },
-    { id: 'RCCService', name: 'RCC Service', csv: './csv/RCCService.csv' },
 ];
 
 // --- Tab Management Functions ---
