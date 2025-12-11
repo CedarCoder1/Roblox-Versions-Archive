@@ -112,19 +112,6 @@ function generateTable(csv) {
     return html;
 }
 
-// --- Window Onload (REMOVED UPLOAD SUBMIT LISTENER) ---
-window.onload = async () => {
-    
-    await createTabs();
-    
-    // NOTE: initializeFileUpload() is kept for general file-handling UI
-    // even though the submit listener is removed.
-    initializeFileUpload();
-    
-    // REMOVED: document.getElementById('upload-form').addEventListener('submit', async (e) => {...})
-    // The entire block of code that handles the file upload via XMLHttpRequest is gone.
-};
-
 // --- createTabs (REMOVED UPLOAD BUTTON) ---
 async function createTabs() {
     
@@ -234,56 +221,4 @@ async function downloadFile(url, onProgress) {
     }
 
     return new Blob(chunks);
-}
-
-// --- File Upload Initialization ---
-function initializeFileUpload() {
-    const fileInput = document.getElementById('file-input');
-    const fileDropArea = document.getElementById('file-drop-area');
-    const fileNameDisplay = document.getElementById('file-name');
-    const additionalFields = document.getElementById('additional-fields');
-    
-    fileDropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileDropArea.classList.add('bg-gray-600');
-    });
-    
-    fileDropArea.addEventListener('dragleave', () => {
-        fileDropArea.classList.remove('bg-gray-600');
-    });
-    
-    fileDropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileDropArea.classList.remove('bg-gray-600');
-        const file = e.dataTransfer.files[0];
-        if (file) {
-            handleFileChosen(file);
-        }
-    });
-    
-    fileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            handleFileChosen(file);
-        }
-    });
-    
-    async function handleFileChosen(file) {
-        const fileInput = document.getElementById('file-input');
-        const fileDropArea = document.getElementById('file-drop-area');
-        const fileNameDisplay = document.getElementById('file-name');
-        const additionalFields = document.getElementById('additional-fields');
-        
-        fileInput.disabled = true;
-        fileDropArea.classList.add('hidden');
-        fileNameDisplay.textContent = `Selected file: ${file.name}`;
-        fileNameDisplay.classList.remove('hidden');
-        additionalFields.classList.remove('hidden');
-        setTimeout(() => {
-            additionalFields.classList.add('opacity-100', 'scale-100');
-            additionalFields.classList.remove('opacity-0', 'scale-95');
-        }, 10); // Trigger transition
-        
-        // The original code was incomplete here, but the file-handling UI logic is maintained.
-    }
 }
