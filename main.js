@@ -164,6 +164,12 @@ async function createTabs() {
     // REMOVED: Upload button creation and appending
 }
 
+
+// --- Keep This ---
+window.onload = async () => {
+    await createTabs();
+};
+
 // --- Modals and Downloads ---
 function openModal(modalId, url, metadata = {}) {
     const modal = document.getElementById(modalId);
