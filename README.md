@@ -9,8 +9,6 @@ Sources for date info:
 
 All of the Player and Studio version downloads were made using this tool: https://github.com/CedarCoder1/Roblox_Asset_Downloader
 
-## Todo
+## To-Do
 * Make tables sortable.
 * Make an archive for Mac versions.
-* Close the gap in the archive between 16/07/2025 and 23/09/2025.
-* Finish the RCCService archive.
